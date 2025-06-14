@@ -1,12 +1,13 @@
-import { Entity, Column, OneToOne } from "typeorm";
-import AbstractEntity from "./abstract.entity"
-import  Employee  from "./employee.entity";
-import Candidate  from "./candidate.entity";
+import { Entity, Column, OneToOne, OneToMany } from "typeorm";
+import AbstractEntity from "./abstract.entity";
+import Employee from "./employee.entity";
+import Candidate from "./candidate.entity";
+import Notification from "./notification.entity";
 
 export enum UserRole {
-    ADMIN = 'ADMIN',
-    EMPLOYEE = 'EMPLOYEE',
-    CANDIDATE = 'CANDIDATE'
+    ADMIN = "ADMIN",
+    EMPLOYEE = "EMPLOYEE",
+    CANDIDATE = "CANDIDATE",
 }
 
 @Entity()
@@ -21,16 +22,19 @@ export class Person extends AbstractEntity {
     email: string;
 
     @Column({
-        type: 'enum',
+        type: "enum",
         enum: UserRole,
-        nullable: false
+        nullable: false,
     })
     role: UserRole;
 
     // Relations
-    @OneToOne(() => Employee, employee => employee.user)
+    @OneToOne(() => Employee, (employee) => employee.user)
     employee: Employee;
 
-    @OneToOne(() => Candidate, candidate => candidate.user)
+    @OneToOne(() => Candidate, (candidate) => candidate.user)
     candidate: Candidate;
+
+    @OneToMany(() => Notification, (notification) => notification.recipient)
+    notifications: Notification[];
 }
