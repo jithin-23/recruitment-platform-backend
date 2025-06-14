@@ -1,5 +1,6 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import AbstractEntity from "./abstract.entity";
+import Referral from "./referral.entity";
 
 @Entity()
 class JobPosting extends AbstractEntity {
@@ -23,6 +24,9 @@ class JobPosting extends AbstractEntity {
 
     @Column()
     salary: number;
+
+    @OneToMany( () => Referral, (referral) => referral.jobPosting)
+    referrals: Referral[];
 }
 
 export default JobPosting;
