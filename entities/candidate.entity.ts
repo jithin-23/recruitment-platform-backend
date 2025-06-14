@@ -1,18 +1,20 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { Person } from "./person.entity";
-
+import AbstractEntity from "./abstract.entity";
 
 @Entity()
-class Candidate {
-    @PrimaryColumn()
-    candidateId: number;
+class Candidate extends AbstractEntity {
+  @Column()
+  yearsOfExperience: number;
 
-    @Column()
-    yearsOfExperience:number;
-
-    // Relations
-    @OneToOne(() => Person, user => user.candidate)
-    @JoinColumn()
-    user: Person;
+  // Relations
+  @OneToOne(() => Person, (user) => user.candidate)
+  @JoinColumn()
+  user: Person;
 }
 export default Candidate;

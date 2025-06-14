@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, OneToOne } from "typeorm";
+import { Entity, Column, OneToOne } from "typeorm";
 import AbstractEntity from "./abstract.entity"
 import  Employee  from "./employee.entity";
 import Candidate  from "./candidate.entity";
