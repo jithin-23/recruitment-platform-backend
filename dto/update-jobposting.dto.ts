@@ -28,4 +28,8 @@ export class UpdateJobPostingDto {
     @IsOptional()
     @IsNumber()
     salary?: number;
+
+    @IsOptional()
+    @IsNumber()
+    bonusForReferral?: number;
 }

@@ -21,4 +21,7 @@ export class CreateJobPostingDto {
 
     @IsNumber()
     salary: number;
+
+    @IsNumber()
+    bonusForReferral: number;
 }
