@@ -1,6 +1,6 @@
 import { IsNumber, IsString } from "class-validator";
 
-export class CreateJobpostingDto {
+export class CreateJobPostingDto {
     @IsString()
     title:string;
 
