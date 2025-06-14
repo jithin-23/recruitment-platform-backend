@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  OneToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, Column, OneToOne, JoinColumn } from "typeorm";
 import { Person } from "./person.entity";
 import AbstractEntity from "./abstract.entity";
 
@@ -11,10 +6,11 @@ import AbstractEntity from "./abstract.entity";
 class Employee extends AbstractEntity {
   @Column()
   joiningDate: Date;
-
+  @Column()
+  password: string;
   // Relations
   @OneToOne(() => Person, (user) => user.employee)
   @JoinColumn()
-  user: Person;
+  person: Person;
 }
 export default Employee;
