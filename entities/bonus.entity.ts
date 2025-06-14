@@ -10,7 +10,7 @@ export enum BonusStatus {
 
 @Entity()
 class Bonus extends AbstractEntity {
-    @Column("decimal", { precision: 10, scale: 2 })
+    @Column()
     bonusAmount: number;
 
     @Column({
