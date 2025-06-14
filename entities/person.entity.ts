@@ -3,6 +3,7 @@ import AbstractEntity from "./abstract.entity";
 import Employee from "./employee.entity";
 import Candidate from "./candidate.entity";
 import Notification from "./notification.entity";
+import Referral from "./referral.entity";
 
 export enum UserRole {
     ADMIN = "ADMIN",
@@ -37,4 +38,10 @@ export class Person extends AbstractEntity {
 
     @OneToMany(() => Notification, (notification) => notification.recipient)
     notifications: Notification[];
+
+    @OneToMany(() => Referral, (referral) => referral.referrer)
+    referralsMade: Referral[];
+
+    @OneToMany(() => Referral, (referral) => referral.referred)
+    referralsReceived: Referral[];
 }
