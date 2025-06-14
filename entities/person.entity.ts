@@ -28,9 +28,9 @@ export class Person extends AbstractEntity {
     role: UserRole;
 
     // Relations
-    @OneToOne(() => Employee, employee => employee.user)
-    employee: Employee;
+    @OneToOne(() => Employee, employee => employee.person)
+    employee?: Employee;
 
-    @OneToOne(() => Candidate, candidate => candidate.user)
-    candidate: Candidate;
+    @OneToOne(() => Candidate, candidate => candidate.person)
+    candidate?: Candidate;
 }
