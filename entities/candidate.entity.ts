@@ -15,6 +15,6 @@ class Candidate extends AbstractEntity {
   // Relations
   @OneToOne(() => Person, (user) => user.candidate)
   @JoinColumn()
-  user: Person;
+  person: Person;
 }
 export default Candidate;

@@ -31,10 +31,10 @@ export class Person extends AbstractEntity {
 
     // Relations
     @OneToOne(() => Employee, (employee) => employee.user)
-    employee: Employee;
+    employee?: Employee;
 
     @OneToOne(() => Candidate, (candidate) => candidate.user)
-    candidate: Candidate;
+    candidate?: Candidate;
 
     @OneToMany(() => Notification, (notification) => notification.recipient)
     notifications: Notification[];
