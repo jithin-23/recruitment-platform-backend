@@ -49,5 +49,3 @@ npm run start-server
 
 * The `.env` file is **not** included in the repository for security reasons.
 * Use the `.env.example` file as a template to create your own `.env`.
-
-```
