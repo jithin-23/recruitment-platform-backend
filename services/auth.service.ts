@@ -42,7 +42,8 @@ class AuthService {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: parseInt(process.env.JWT_VALIDITY),
+            // expiresIn: process.env.JWT_VALIDITY,
+            expiresIn: "24h",
         });
 
         this.logger.info(
