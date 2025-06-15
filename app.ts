@@ -22,7 +22,7 @@ server.get("/", (req, res) => {
         await dataSource.initialize();
         console.log("connected");
 
-        server.listen(3000, () => {
+        server.listen(process.env.PORT || 3000, () => {
             console.info("server listening to 3000");
         });
     } catch (e) {

@@ -3,7 +3,7 @@ import JobPostingRepository from "../repositories/jobposting.repository";
 import dataSource from "../db/data-source";
 import JobPosting from "../entities/jobposting.entity";
 import JobPostingService from "../services/jobposting.service";
-import JobPostingController from "../controllers/employee.controller";
+import JobPostingController from "../controllers/jobposting.controller";
 
 const jobPostingRouter = express.Router();
 
