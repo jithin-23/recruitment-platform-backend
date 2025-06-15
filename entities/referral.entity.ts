@@ -48,7 +48,7 @@ class Referral extends AbstractEntity {
   @JoinColumn()
   resume?: Resume;
 
-  @OneToOne(() => Bonus, (bonus) => bonus.referral,{cascade:true})
+  @OneToOne(() => Bonus, (bonus) => bonus.referral)
   bonus: Bonus;
 }
 
