@@ -24,14 +24,14 @@ class AuthService {
             )
         ) {
             throw new HttpException(
-                400,
+                401,
                 "User role does not have login privileges"
             );
         }
 
         const employee = await this.employeeService.getEmployeeByPerson(person);
         if (!(employee.password === password)) {
-            throw new HttpException(400, "Incorect password entry");
+            throw new HttpException(401, "Incorrect password entry");
         }
 
         const payload: JwtPayload = {
