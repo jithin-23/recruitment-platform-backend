@@ -27,6 +27,9 @@ class JobPosting extends AbstractEntity {
 
     @OneToMany( () => Referral, (referral) => referral.jobPosting)
     referrals: Referral[];
+
+    @Column()
+    bonusForReferral: number;
 }
 
 export default JobPosting;
