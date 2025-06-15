@@ -11,7 +11,7 @@ const dataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,    
     extra: {max: 5, min: 2},
-    synchronize: true,
+    synchronize: false,
     logging: true,
     namingStrategy: new SnakeNamingStrategy,
     entities: ["dist/entities/*.js"],
