@@ -1,3 +1,4 @@
+import dataSource from "../db/data-source";
 import { CreatePersonDto } from "../dto/create-person-dto";
 import { Person } from "../entities/person.entity";
 import HttpException from "../exception/httpException";
@@ -60,5 +61,9 @@ class PersonService {
         this.logger.info(`Deleted Person (${existingPerson.name}) with id: ${existingPerson.id}`);
     }
 }
+
+const personRepository = new PersonRepository(dataSource.getRepository(Person));
+const personService = new PersonService(personRepository);
+export {personService};
 
 export default PersonService;
