@@ -22,8 +22,9 @@ server.get("/", (req, res) => {
         await dataSource.initialize();
         console.log("connected");
 
-        server.listen(process.env.PORT || 3000, () => {
-            console.info("server listening to 3000");
+        const port = process.env.PORT || 3000
+        server.listen(port, () => {
+            console.info("server listening to port:",port);
         });
     } catch (e) {
         console.error(`Failed to connect to DB:  ${e}`);
