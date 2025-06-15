@@ -54,10 +54,26 @@ export class SeedMoreInitialData1749961437028 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `DELETE FROM notification WHERE recipient_id IN (1, 2, 3, 4, 5, 6);`
-        );
-        await queryRunner.query(`DELETE FROM bonus WHERE referral_id = 3;`);
-        await queryRunner.query(`DELETE FROM referral WHERE id IN (1, 2, 3);`);
+        await queryRunner.query(`
+            DELETE FROM notification
+            WHERE title IN (
+                'Welcome',
+                'Task Assigned',
+                'Interview Scheduled',
+                'Reminder',
+                'Referral Update',
+                'Policy Change'
+            );
+        `);
+
+        await queryRunner.query(`
+            DELETE FROM bonus
+            WHERE referral_id = 3;
+        `);
+
+        await queryRunner.query(`
+            DELETE FROM referral
+            WHERE id IN (1, 2, 3);
+        `);
     }
 }
