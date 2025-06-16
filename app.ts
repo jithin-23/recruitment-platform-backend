@@ -4,6 +4,7 @@ import cors from "cors"
 import errorMiddleware from "./middlewares/errorMiddleware";
 import jobPostingRouter from "./routes/jobposting.routes";
 import authRouter from "./routes/auth.routes";
+import resumeRouter from "./routes/resume.routes";
 import referralRouter from "./routes/referral.route";
 
 const server = express();
@@ -11,7 +12,8 @@ const server = express();
 server.use(express.json());
 server.use( cors() )
 server.use("/auth",authRouter);
-server.use("/jobpostings",jobPostingRouter)
+server.use("/jobpostings",jobPostingRouter);
+server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter)
 
 server.use(errorMiddleware);
@@ -35,5 +37,3 @@ server.get("/", (req, res) => {
         process.exit(1);
     }
 })();
-
-
