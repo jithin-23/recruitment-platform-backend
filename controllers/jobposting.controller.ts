@@ -11,11 +11,15 @@ class JobPostingController {
         private jobPostingService: JobPostingService,
         private router: Router
     ) {
-        router.post("/", this.createJobPosting.bind(this))
-        router.get("/", this.getAllJobPostings.bind(this))
-        router.get("/:id", this.getJobPostingById.bind(this))
+        router.post("/", this.createJobPosting.bind(this));
+        router.get("/", this.getAllJobPostings.bind(this));
+        router.get("/:id", this.getJobPostingById.bind(this));
         router.put("/:id", this.updateJobPosting.bind(this));
         router.patch("/:id", this.updateJobPosting.bind(this));
+        router.patch(
+            "/:id/decrement",
+            this.decrementRemainingPositions.bind(this)
+        );
         router.delete("/:id", this.deleteJobPosting.bind(this));
     }
 
@@ -72,6 +76,22 @@ class JobPostingController {
             await this.jobPostingService.updateJobPosting(
                 id,
                 updateJobPostingDto
+            );
+            res.status(204).send();
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async decrementRemainingPositions(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const jobPostingId = Number(req.params.id);
+            await this.jobPostingService.decrementRemainingPositions(
+                jobPostingId
             );
             res.status(204).send();
         } catch (error) {

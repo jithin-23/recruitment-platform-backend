@@ -23,6 +23,10 @@ export class UpdateJobPostingDto {
 
     @IsOptional()
     @IsNumber()
+    remainingPositions?: number;
+
+    @IsOptional()
+    @IsNumber()
     experience?: number;
 
     @IsOptional()
