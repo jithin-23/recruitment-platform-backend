@@ -4,17 +4,12 @@ import Notification from "../entities/notification.entity";
 class NotificationRepository {
     constructor(private repository: Repository<Notification>) {}
 
-    async create(notification: Notification): Promise<Notification> {
-        return this.repository.save(notification);
+    async create(notifications: Notification[]): Promise<Notification[]> {
+        return this.repository.save(notifications);
     }
 
     async findMany(): Promise<Notification[]> {
-        return this.repository.find({
-            relations: {
-                recipient: true,
-                referral: true,
-            },
-        });
+        return this.repository.find();
     }
 
     async findOneById(id: number): Promise<Notification> {
