@@ -26,6 +26,8 @@ class CandidateRepository {
     });
   }
 
+
+
   async delete(id: number): Promise<void> {
     await this.repository.delete({ id });
   }
