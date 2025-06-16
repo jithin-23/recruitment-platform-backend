@@ -27,6 +27,8 @@ DB_PASSWORD=postgres
 DB_HOST=localhost
 DB_DATABASE=recruitment
 DB_PORT=5432
+
+JWT_SECRET = my-super-secret
 ```
 
 Make sure these values match your local database setup.

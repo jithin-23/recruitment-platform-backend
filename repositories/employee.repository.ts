@@ -1,5 +1,6 @@
 import { Repository } from "typeorm";
 import Employee from "../entities/employee.entity";
+import { Person } from "../entities/person.entity";
 
 class EmployeeRepository {
   constructor(private repository: Repository<Employee>) {}
@@ -19,6 +20,15 @@ class EmployeeRepository {
   async findOneById(id: number): Promise<Employee | null> {
     return this.repository.findOne({
       where: { id },
+      relations: {
+        person: true,
+      },
+    });
+  }
+
+  async findOneByPerson(person: Person): Promise<Employee | null> {
+    return this.repository.findOne({
+      where: { person:{ id: person.id }},
       relations: {
         person: true,
       },
