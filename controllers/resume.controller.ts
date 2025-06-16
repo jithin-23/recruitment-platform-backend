@@ -31,6 +31,25 @@ class ResumeController {
   constructor(private resumeService: ResumeService, private router: Router) {
     // POST /upload
     router.post("/", upload.single("resume"), this.uploadResume.bind(this));
+    // GET /:id (download resume)
+    router.get("/:id", this.downloadResume.bind(this));
+  }
+
+  async downloadResume(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      const resume = await this.resumeService.getResumeById(id);
+      if (!resume) {
+        return res.status(404).json({ error: "Resume not found" });
+      }
+      const filePath = uploadsDir + resume.filePath;
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: "File not found" });
+      }
+      res.download(filePath);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async uploadResume(req: Request, res: Response, next: NextFunction) {

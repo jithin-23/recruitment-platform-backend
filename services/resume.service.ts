@@ -7,6 +7,10 @@ class ResumeService {
 
   constructor(private resumeRepository: ResumeRepository) {}
 
+  async getResumeById(id: string | number): Promise<Resume | null> {
+    return this.resumeRepository.findOneById(Number(id));
+  }
+
   async saveResumeMetadata(file: Express.Multer.File): Promise<Resume> {
     const resume = new Resume();
     resume.filePath = file.filename;
