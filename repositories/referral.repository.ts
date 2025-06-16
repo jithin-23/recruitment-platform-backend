@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { MoreThanOrEqual, Repository } from "typeorm";
 import Referral from "../entities/referral.entity";
 
 class ReferralRepository {
@@ -13,8 +13,8 @@ class ReferralRepository {
       where: { deletedAt: null },
       relations: {
         jobPosting: true,
-        referrer: true,
-        referred: true,
+        referrer: {employee:true},
+        referred:{candidate: true},
         resume: true,
       },
     });
@@ -25,11 +25,22 @@ class ReferralRepository {
       where: { id, deletedAt: null },
       relations: {
         jobPosting: true,
-        referrer: true,
-        referred: true,
+        referrer: { employee: true },
+        referred: { candidate: true },
         resume: true,
       },
     });
+  }
+
+
+  async findRecentReferral(referredPersonid,existingJobPostingid,sixMonthsAgo):Promise<Referral> {
+    return this.repository.findOne({
+            where: {
+                referred: { id: referredPersonid },
+                jobPosting: { id: existingJobPostingid },
+                createdAt: MoreThanOrEqual(sixMonthsAgo)
+            }
+        });
   }
 
   async findByReferrer(referrerId: number): Promise<Referral[]> {

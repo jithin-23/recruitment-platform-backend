@@ -54,6 +54,8 @@ class CandidateService {
         return candidate;
     }
 
+
+
     async updateCandidate(id: number, updateCandidateDto: CreateCandidateDto): Promise<void> {
         const existingCandidate = await this.candidateRepository.findOneById(id);
         if (!existingCandidate) {
@@ -73,6 +75,7 @@ class CandidateService {
         this.logger.info(`Updated Candidate with id: ${id}`);
        
     }
+
 
 
     async deleteCandidate(id: number): Promise<void> {

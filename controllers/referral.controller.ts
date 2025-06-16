@@ -5,6 +5,7 @@ import { CreateReferralDto } from "../dto/create-referral-dto";
 import { validate } from "class-validator";
 import HttpException from "../exception/httpException";
 
+
 class ReferralController {
     constructor(
         private referralService: ReferralService,
@@ -13,7 +14,7 @@ class ReferralController {
         router.post("/", this.createReferral.bind(this));
         router.get("/", this.getAllReferrals.bind(this));
         router.get("/:id", this.getReferralById.bind(this));
-        router.put("/:id", this.updateReferral.bind(this));
+        router.put("/:id", this.updateReferralStatus.bind(this));
     }
 
     async createReferral(req: Request, res: Response, next: NextFunction) {
@@ -27,6 +28,20 @@ class ReferralController {
             res.status(201).send(savedReferral);
         } catch (error) {
             next(error);
+        }
+    }
+    
+    async updateReferralStatus(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params.id);
+            const status = req.body.status; // Assuming status is sent in the request body
+            if (!status) {
+                throw new HttpException(400, "Status is required");
+            }
+            const updatedReferral = await this.referralService.updateStatus(id, status);
+            res.status(200).json(updatedReferral);
+        } catch (err) {
+            next(err);
         }
     }
 
@@ -45,16 +60,7 @@ class ReferralController {
         }
     }
 
-    async updateReferral(req: Request, res: Response, next: NextFunction) {
-        try {
-            const id = Number(req.params.id);
-            const updateReferralDto = req.body; // Partial<Referral> expected
-            const updatedReferral = await this.referralService.updateReferral(id, updateReferralDto);
-            res.status(200).json(updatedReferral);
-        } catch (error) {
-            next(error);
-        }
-    }
+    
 }
 
 export default ReferralController;

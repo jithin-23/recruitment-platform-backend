@@ -1,4 +1,4 @@
-import Referral from "../entities/referral.entity";
+import Referral, { ReferralStatus } from "../entities/referral.entity";
 import ReferralRepository from "../repositories/referral.repository";
 import { CreateReferralDto } from "../dto/create-referral-dto";
 import HttpException from "../exception/httpException";
@@ -6,6 +6,7 @@ import { LoggerService } from "./logger.service";
 import {personService} from "./person.service";
 import {candidateService} from "./candidate.service";
 import {jobPostingService} from "../routes/jobposting.routes";
+
 
 class ReferralService {
     private logger = LoggerService.getInstance(ReferralService.name);
@@ -22,7 +23,7 @@ class ReferralService {
             throw new HttpException(404, `Referrer with id ${createReferralDto.referrerId} not found`);
         }
 
-       let referredPerson = await personService.getPersonByEmail(createReferralDto.referred.person.email)
+        let referredPerson = await personService.getPersonByEmail(createReferralDto.referred.person.email)
             .catch(() => null);
 
         if (!referredPerson) {
@@ -35,9 +36,22 @@ class ReferralService {
         }
 
         const existingJobPosting = await jobPostingService.getJobPostingById(createReferralDto.jobPostingId);
-        
-        const referral = new Referral();
 
+        // --- Prevent duplicate referral within 6 months ---
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+        const recentReferral = await this.referralRepository.findRecentReferral(referredPerson.id,existingJobPosting.id,sixMonthsAgo)
+
+        if (recentReferral) {
+            throw new HttpException(
+                409,
+                "This candidate has already been referred for this role within the last 6 months."
+            );
+        }
+        // --- End duplicate check ---
+
+        const referral = new Referral();
         referral.jobPosting = existingJobPosting;
         referral.referrer = referrer;
         referral.referred = referredPerson;
@@ -68,25 +82,23 @@ class ReferralService {
         return referral;
     }
 
+    async updateStatus(id: number, status: ReferralStatus): Promise<void> {
+        const existingReferral = await this.referralRepository.findById(id);
+        if (!existingReferral) {
+            throw new HttpException(404, `Referral with id ${id} not found`);
+        }
+        existingReferral.status = status;   
+        const updatedReferral = await this.referralRepository.updateReferral(id, existingReferral);
+        this.logger.info(`Updated Referral status to ${status} for id: ${id}`);   
+        }
+
     async getReferralsByReferrer(referrerId: number): Promise<Referral[]> {
         const referrals = await this.referralRepository.findByReferrer(referrerId);
         this.logger.info(`Fetched referrals for referrer id: ${referrerId}`);
         return referrals;
     }
 
-    async updateReferral(id: number, updateReferralDto: Partial<Referral>): Promise<Referral> {
-        const existingReferral = await this.referralRepository.findById(id);
-        if (!existingReferral) {
-            throw new HttpException(404, `Referral with id ${id} not found`);
-        }
-
-        Object.assign(existingReferral, updateReferralDto);
-
-        const updatedReferral = await this.referralRepository.updateReferral(id, existingReferral);
-
-        this.logger.info(`Updated Referral with id: ${id}`);
-        return updatedReferral;
-    }
+   
 }
 
 export default ReferralService;

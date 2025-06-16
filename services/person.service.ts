@@ -48,17 +48,16 @@ class PersonService {
         return person;
     }
 
-   async updatePerson(id: number, updatePersonDto: CreatePersonDto) : Promise<void> {
-        const existingPerson = await this.personRepository.findOneById(id);
-        if (!existingPerson) {
-            throw new HttpException(404, `Person with id ${id} not found`);
-        }
-        const updatedPerson = Object.assign(existingPerson, updatePersonDto);
-         await this.personRepository.update(id, updatedPerson);
-        this.logger.info(`Updated Person (${updatedPerson.name}) with id: ${updatedPerson.id}`);
-   
+async updatePerson(id: number, updatePersonDto: CreatePersonDto): Promise<void> {
+    const existingPerson = await this.personRepository.findOneById(id);
+    if (!existingPerson) {
+        throw new HttpException(404, `Person with id ${id} not found`);
     }
-
+    const updatedPerson = Object.assign(existingPerson, updatePersonDto);
+    await this.personRepository.update(id, updatedPerson);
+    this.logger.info(`Updated Person (${updatedPerson.name}) with id: ${updatedPerson.id}`);
+}
+    
     async deletePerson(id: number): Promise<void> {
         const existingPerson = await this.personRepository.findOneById(id);
         if (!existingPerson) {
