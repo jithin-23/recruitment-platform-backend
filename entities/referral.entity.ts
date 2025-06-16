@@ -1,16 +1,19 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import AbstractEntity from "./abstract.entity";
 import JobPosting from "./jobposting.entity";
 import { Person } from "./person.entity";
 import Resume from "./resume.entity";
 import Bonus from "./bonus.entity";
+import Notification from "./notification.entity";
+import ReferralStatusHistory from "./referralstatushistory.entity";
 
 export enum ReferralStatus {
 	REFERRAL_SUBMITTED = "Referral Submitted",
 	REFERRAL_UNDER_REVIEW = "Referral Under Review",
 	REFERRAL_ACCEPTED = "Referral Accepted",
-	INTERVIEWS_ONGOING = "Interviews Ongoing",
-	INTERVIEWS_COMPLETED = "Interviews Completed",
+	INTERVIEW_ROUND_1 = "Interviews Round 1",
+	INTERVIEWS_ROUND_2 = "Interview Round 2",
+  ACCEPTED = "Accepted",
 	REJECTED = "Rejected",
 }
 
@@ -50,6 +53,12 @@ class Referral extends AbstractEntity {
 
   @OneToOne(() => Bonus, (bonus) => bonus.referral)
   bonus: Bonus;
+
+  @OneToMany(() => Notification, (notification) => notification.referral)
+  notifications: Notification[]
+
+  @OneToMany( () => ReferralStatusHistory, (history) => history.referral)
+  histories: ReferralStatusHistory[];
 }
 
 export default Referral;
