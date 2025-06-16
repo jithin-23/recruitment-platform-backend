@@ -36,6 +36,7 @@ class AuthService {
 
         const payload: JwtPayload = {
             personId: person.id,
+            personName: person.name,
             employeeId: employee.id,
             email: person.email,
             role: person.role,
