@@ -5,7 +5,7 @@ import HttpException from "../exception/httpException";
 import { LoggerService } from "./logger.service";
 import {personService} from "./person.service";
 import {candidateService} from "./candidate.service";
-import {jobPostingService} from "../routes/jobposting.route";
+import {jobPostingService} from "../routes/jobposting.routes";
 
 class ReferralService {
     private logger = LoggerService.getInstance(ReferralService.name);

@@ -77,5 +77,3 @@ export {personService};
 
 export default PersonService;
 
-const personRepository = new PersonRepository(dataSource.getRepository(Person));
-export const personService = new PersonService(personRepository);
