@@ -71,6 +71,10 @@ class PersonService {
     }
 }
 
+const personRepository = new PersonRepository(dataSource.getRepository(Person));
+const personService = new PersonService(personRepository);
+export {personService};
+
 export default PersonService;
 
 const personRepository = new PersonRepository(dataSource.getRepository(Person));
