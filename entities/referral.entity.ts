@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import AbstractEntity from "./abstract.entity";
 import JobPosting from "./jobposting.entity";
 import { Person } from "./person.entity";
 import Resume from "./resume.entity";
 import Bonus from "./bonus.entity";
+import Notification from "./notification.entity";
 
 export enum ReferralStatus {
   REFERRAL_SUBMITTED = "Referral Submitted",
@@ -16,8 +17,6 @@ export enum ReferralStatus {
 
 @Entity()
 class Referral extends AbstractEntity {
-  @Column({ default: 0 })
-  currentRound: number;
 
   @Column({
     type: "enum",
@@ -50,6 +49,9 @@ class Referral extends AbstractEntity {
 
   @OneToOne(() => Bonus, (bonus) => bonus.referral)
   bonus: Bonus;
+
+  @OneToMany(() => Notification, (notification) => notification.referral )
+  notifications: Notification[];
 }
 
 export default Referral;

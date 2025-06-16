@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne } from "typeorm";
 import AbstractEntity from "./abstract.entity";
 import { Person } from "./person.entity";
+import Referral from "./referral.entity";
 
 export enum NotificaitonStatus {
     READ = "READ",
@@ -13,6 +14,11 @@ class Notification extends AbstractEntity {
         onDelete: "CASCADE",
     })
     recipient: Person;
+
+    @ManyToOne( () => Referral, (referral) => referral.notifications, {
+        onDelete: "CASCADE"
+    })
+    referral: Referral;
 
     @Column()
     title: string;
