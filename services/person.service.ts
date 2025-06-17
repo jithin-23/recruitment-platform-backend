@@ -30,6 +30,12 @@ class PersonService {
         return allPersons;
     }
 
+    async getAllAdmins(): Promise<Person[]> {
+        const allAdmins = await this.personRepository.findAllAdmins();
+        this.logger.info(`All Admins Fetched`);
+        return allAdmins;
+    }
+
     async getPersonById(id: number): Promise<Person> {
         const person = await this.personRepository.findOneById(id);
         if (!person) {
