@@ -32,7 +32,16 @@ class ReferralRepository {
     });
   }
 
+async findReferralHistory(id:number): Promise<Referral>{
+return this.repository.findOne({
+      where: { id } ,
+      relations: {
+        histories: true,
+      },
+    });
+}
 
+  
   async findRecentReferral(referredPersonid,existingJobPostingid,sixMonthsAgo):Promise<Referral> {
     return this.repository.findOne({
             where: {
