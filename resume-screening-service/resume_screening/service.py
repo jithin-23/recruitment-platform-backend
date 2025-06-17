@@ -24,12 +24,28 @@ def _generate_resume_brief(text: str) -> str:
     )
     return response.choices[0].message.content.strip()
 
-def _calculate_similarity(text1: str, text2: str) -> float:
-    emb1 = _sim_model.encode(text1, convert_to_tensor=True)
-    emb2 = _sim_model.encode(text2, convert_to_tensor=True)
+def _calculate_similarity(text1: str, text2: str, model) -> float:
+    emb1 = model.encode(text1, convert_to_tensor=True)
+    emb2 = model.encode(text2, convert_to_tensor=True)
     return util.pytorch_cos_sim(emb1, emb2).item()
 
-def _extract_skills(text: str) -> list:
+def _extract_skills_comma_separated(text):
+    prompt = (
+        "You are an HR specialist with technical expertisereviewing a candidate's resume.\n"
+        "Your task is to extract 8 key technical skills mentioned in the resume based on the job description requirement.\n"
+        "Return 15 maximum key technical skills in a comma-separated list, no extra text or punctuation.\n\n"
+        f"Resume:\n{text}\n\n"
+        "Skills:"
+    )
+    response = _openai_client.chat.completions.create(
+        model="gpt-4.1-mini",  # or gpt-3.5-turbo for lower cost
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+        max_tokens=200
+    )
+    return response.choices[0].message.content.strip()
+
+def _extract_skills_json(text: str) -> list:
     prompt = (
         "You are a helpful assistant specialized in HR recruitment. "
         "Extract the four most relevant skills from the following resume text and output them as a JSON list named skills, with no additional commentary:\n\n"
@@ -63,18 +79,39 @@ def score_resume(pdf_bytes: bytes, description: str) -> dict:
     # 1. Extract raw text
     text = extract_text(pdf_bytes)
     print(f"Extracted {len(text)} characters from resume PDF.")
-    # 2. Generate brief summary via OpenAI
-    summary = _generate_resume_brief(text)
-    print(f"Generated summary of {len(summary)} characters.")
-    # 3. Compute similarity score
-    score = _calculate_similarity(summary, description)
+    
+    # Generate brief summary via OpenAI
+    resume_summary = _generate_resume_brief(text)
+    print(f"Generated resume summary of {len(resume_summary)} characters.")
 
-    # 4. Extract top 4 skills
-    skills = _extract_skills(summary)
-    print(f"Extracted skills: {skills}")
+    # Extract skills from the resume brief text for similarity comparison
+    skills_resume_for_similarity = _extract_skills_comma_separated(text)
+    print(f"Extracted skills from resume for similarity: {skills_resume_for_similarity}")
+
+    # Generate job description summary and skills for similarity comparison
+    jd_summary = _generate_resume_brief(description)
+    print(f"Generated JD summary of {len(jd_summary)} characters.")
+    skills_jd_for_similarity = _extract_skills_comma_separated(description)
+    print(f"Extracted skills from JD for similarity: {skills_jd_for_similarity}")
+
+    # Compute similarity score between resume summary and job description summary
+    similarity_summary = _calculate_similarity(resume_summary, jd_summary, _sim_model)
+    print(f"Similarity score (summary): {similarity_summary:.3f}")
+
+    # Compute similarity score between skills in resume and skills in jd
+    similarity_skills = _calculate_similarity(skills_resume_for_similarity, skills_jd_for_similarity, _sim_model)
+    print(f"Similarity score (skills): {similarity_skills:.3f}")
+
+    # Compute weighted sum of similarity scores
+    weighted_similarity = (0.3 * similarity_summary) + (0.7 * similarity_skills)
+    print(f"Weighted similarity score: {weighted_similarity:.3f}")
+
+    # Extract top 4 skills using the original function for the return value
+    skills = _extract_skills_json(text) # Use original _extract_skills
+    print(f"Extracted skills (original): {skills}")
     skills_str = ", ".join(skills)
     
     return {
-        "resumeScore": score,
+        "resumeScore": weighted_similarity,
         "skills": skills_str
     }
