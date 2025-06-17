@@ -3,7 +3,7 @@ from resume_screening.routes import screening_blueprint
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(screening_blueprint, url_prefix='/api')
+    app.register_blueprint(screening_blueprint, url_prefix='/analyze_resume')
     
     @app.errorhandler(Exception)
     def handle_exception(e):

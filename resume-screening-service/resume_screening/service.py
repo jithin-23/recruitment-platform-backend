@@ -17,7 +17,7 @@ def _generate_resume_brief(text: str) -> str:
         f"{text}\n\nBrief Summary:"
     )
     response = _openai_client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4.1-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
         max_tokens=300
@@ -37,7 +37,7 @@ def _extract_skills(text: str) -> list:
         "Output JSON format, e.g.: {\"skills\": [\"skill1\", \"skill2\", \"skill3\", \"skill4\"]}"
     )
     response = _openai_client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4.1-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.0,
         max_tokens=60
@@ -62,15 +62,16 @@ def score_resume(pdf_bytes: bytes, description: str) -> dict:
     """
     # 1. Extract raw text
     text = extract_text(pdf_bytes)
-
+    print(f"Extracted {len(text)} characters from resume PDF.")
     # 2. Generate brief summary via OpenAI
     summary = _generate_resume_brief(text)
-
+    print(f"Generated summary of {len(summary)} characters.")
     # 3. Compute similarity score
     score = _calculate_similarity(summary, description)
 
     # 4. Extract top 4 skills
     skills = _extract_skills(summary)
+    print(f"Extracted skills: {skills}")
     skills_str = ", ".join(skills)
     
     return {
