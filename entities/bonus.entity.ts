@@ -20,7 +20,7 @@ class Bonus extends AbstractEntity {
     })
     bonusStatus: BonusStatus;
 
-    @OneToOne(() => Referral, { onDelete: "CASCADE", nullable: false })
+    @OneToOne(() => Referral, (referral) => referral.bonus, { onDelete: "CASCADE", nullable: false })
     @JoinColumn()
     referral: Referral;
 
