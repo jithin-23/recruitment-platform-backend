@@ -9,7 +9,11 @@ class JobPostingRepository {
     }
 
     async findMany(): Promise<JobPosting[]> {
-        return this.repository.find();
+        return this.repository.find({
+            relations: {
+                referrals: true,
+            },
+        });
     }
 
     async findOneById(id: number): Promise<JobPosting> {
