@@ -14,7 +14,8 @@ class ReferralController {
         router.post("/", this.createReferral.bind(this));
         router.get("/", this.getAllReferrals.bind(this));
         router.get("/:id", this.getReferralById.bind(this));
-        router.put("/:id", this.updateReferralStatus.bind(this));
+        router.get("/response/:id", this.getReferralResponseById.bind(this));
+        router.patch("/:id", this.updateReferralStatus.bind(this));
     }
 
     async createReferral(req: Request, res: Response, next: NextFunction) {
@@ -60,6 +61,15 @@ class ReferralController {
         }
     }
 
+       async getReferralResponseById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params.id);
+            const referral = await this.referralService.getReferralResponse(id);
+            res.status(200).json(referral);
+        } catch (err) {
+            next(err);
+        }
+    }
     
 }
 

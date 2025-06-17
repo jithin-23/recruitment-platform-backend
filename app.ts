@@ -7,6 +7,7 @@ import authRouter from "./routes/auth.routes";
 import resumeRouter from "./routes/resume.routes";
 import referralRouter from "./routes/referral.route";
 import notificationRouter from "./routes/notification.routes";
+import bonusRouter from "./routes/bonus.routes";
 
 const server = express();
 
@@ -17,6 +18,7 @@ server.use("/jobpostings",jobPostingRouter);
 server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter);
 server.use("/notifications",notificationRouter);
+server.use("/bonus", bonusRouter);
 
 server.use(errorMiddleware);
 
