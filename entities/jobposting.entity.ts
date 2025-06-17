@@ -20,6 +20,9 @@ class JobPosting extends AbstractEntity {
     numOfPositions: number;
 
     @Column()
+    remainingPositions: number;
+
+    @Column()
     experience: number;
 
     @Column()

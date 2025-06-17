@@ -10,12 +10,12 @@ class PersonService {
 
     constructor(private personRepository: PersonRepository) {}
 
-    async createPerson(createPersonDto: CreatePersonDto): Promise<Person> {
+    async createPerson(person:Person): Promise<Person> {
         const newPerson = new Person();
-        newPerson.name = createPersonDto.name;
-        newPerson.phone = createPersonDto.phone;
-        newPerson.email = createPersonDto.email;
-        newPerson.role = createPersonDto.role;
+        newPerson.name = person.name;
+        newPerson.phone = person.phone;
+        newPerson.email = person.email;
+        newPerson.role = person.role;
 
         const savedPerson = await this.personRepository.create(newPerson);
 
@@ -48,8 +48,16 @@ class PersonService {
         return person;
     }
 
-   
-
+async updatePerson(id: number, updatePersonDto: CreatePersonDto): Promise<void> {
+    const existingPerson = await this.personRepository.findOneById(id);
+    if (!existingPerson) {
+        throw new HttpException(404, `Person with id ${id} not found`);
+    }
+    const updatedPerson = Object.assign(existingPerson, updatePersonDto);
+    await this.personRepository.update(id, updatedPerson);
+    this.logger.info(`Updated Person (${updatedPerson.name}) with id: ${updatedPerson.id}`);
+}
+    
     async deletePerson(id: number): Promise<void> {
         const existingPerson = await this.personRepository.findOneById(id);
         if (!existingPerson) {
@@ -67,3 +75,4 @@ const personService = new PersonService(personRepository);
 export {personService};
 
 export default PersonService;
+

@@ -16,7 +16,7 @@ class Notification extends AbstractEntity {
     recipient: Person;
 
     @ManyToOne( () => Referral, (referral) => referral.notifications, {
-        onDelete: "CASCADE"
+        onDelete: "SET NULL"
     })
     referral: Referral;
 

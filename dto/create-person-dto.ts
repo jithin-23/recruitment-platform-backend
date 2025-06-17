@@ -11,6 +11,5 @@ export class CreatePersonDto {
     @IsString()
     email: string;
 
-    @IsEnum(UserRole)
-    role: UserRole;
+  
 }

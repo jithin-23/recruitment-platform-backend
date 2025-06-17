@@ -12,7 +12,7 @@ const dataSource = new DataSource({
     password: process.env.DB_PASSWORD,    
     extra: {max: 5, min: 2},
     synchronize: false,
-    logging: true,
+    logging: false,
     namingStrategy: new SnakeNamingStrategy,
     entities: ["dist/entities/*.js"],
     migrations: ["dist/db/migrations/*.js"]

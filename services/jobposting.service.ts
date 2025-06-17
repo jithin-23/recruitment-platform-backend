@@ -21,6 +21,7 @@ class JobPostingService {
         newJobPosting.experience = createJobPostingDto.experience;
         newJobPosting.salary = createJobPostingDto.salary;
         newJobPosting.bonusForReferral = createJobPostingDto.bonusForReferral;
+        newJobPosting.remainingPositions = createJobPostingDto.numOfPositions;
 
         const savedJob = await this.jobPostingRepository.create(newJobPosting);
 
@@ -83,9 +84,30 @@ class JobPostingService {
         if (updateJobPostingDto.location !== undefined)
             existingJobPosting.location = updateJobPostingDto.location;
 
-        if (updateJobPostingDto.numOfPositions !== undefined)
+        if (updateJobPostingDto.numOfPositions !== undefined) {
+            if (
+                updateJobPostingDto.numOfPositions <
+                existingJobPosting.remainingPositions
+            ) {
+                existingJobPosting.remainingPositions =
+                    updateJobPostingDto.numOfPositions;
+            }
             existingJobPosting.numOfPositions =
                 updateJobPostingDto.numOfPositions;
+        }
+
+        if (updateJobPostingDto.remainingPositions !== undefined) {
+            if (
+                updateJobPostingDto.remainingPositions >
+                existingJobPosting.numOfPositions
+            )
+                throw new HttpException(
+                    400,
+                    "Remaining position cannot be greater than total number of positions"
+                );
+            existingJobPosting.remainingPositions =
+                updateJobPostingDto.remainingPositions;
+        }
 
         if (updateJobPostingDto.experience !== undefined)
             existingJobPosting.experience = updateJobPostingDto.experience;
@@ -101,6 +123,27 @@ class JobPostingService {
 
         this.logger.info(
             `Updated Job Posting (${existingJobPosting.title}) with id: ${existingJobPosting.id}`
+        );
+    }
+
+    async decrementRemainingPositions(id: number): Promise<void> {
+        const jobPosting = await this.jobPostingRepository.findOneById(id);
+        if (!jobPosting) {
+            throw new HttpException(404, `Job posting with id ${id} not found`);
+        }
+
+        if (jobPosting.remainingPositions <= 0) {
+            throw new HttpException(
+                400,
+                `No remaining positions available for job posting with id ${id}`
+            );
+        }
+        jobPosting.remainingPositions -= 1;
+
+        await this.jobPostingRepository.update(id, jobPosting);
+
+        this.logger.info(
+            `JobPosting ${id} remainingPositions decremented to ${jobPosting.remainingPositions}`
         );
     }
 
