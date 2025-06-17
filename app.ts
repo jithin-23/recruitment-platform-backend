@@ -16,7 +16,7 @@ server.use("/auth",authRouter);
 server.use("/jobpostings",jobPostingRouter);
 server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter);
-server.use("/notification",notificationRouter);
+server.use("/notifications",notificationRouter);
 
 server.use(errorMiddleware);
 
