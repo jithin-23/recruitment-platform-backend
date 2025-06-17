@@ -7,6 +7,7 @@ screening_blueprint = Blueprint('screening', __name__)
 def screen_resume():
     # Expect multipart/form-data with 'resume' file and 'description' text
     if 'resume' not in request.files or 'description' not in request.form:
+        print("Missing resume file or job description in request")
         return jsonify({'error': 'Missing resume file or job description'}), 400
 
     resume_file = request.files['resume']
