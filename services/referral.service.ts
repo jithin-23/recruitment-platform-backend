@@ -8,6 +8,8 @@ import { candidateService } from "./candidate.service";
 import { jobPostingService } from "../routes/jobposting.routes";
 import { ReferralResponseDto } from "../dto/referral-response.dto";
 import ReferralStatusHistory from "../entities/referralstatushistory.entity";
+import { resumeService } from "../routes/resume.routes";
+import Resume from "../entities/resume.entity";
 
 class ReferralService {
 	private logger = LoggerService.getInstance(ReferralService.name);
@@ -17,7 +19,7 @@ class ReferralService {
 	async createReferral(
 		createReferralDto: CreateReferralDto
 	): Promise<Referral> {
-		// Fetch referrer by ID
+		// --- Fetch referrer, referred, and job posting (existing logic) ---
 		const referrer = await personService.getPersonById(
 			createReferralDto.referrerId
 		);
@@ -63,11 +65,28 @@ class ReferralService {
 		}
 		// --- End duplicate check ---
 
+		let resumeToAssociate: Resume | undefined = undefined;
+
+		if (createReferralDto.resumeId) {
+			const resume = await resumeService.getResumeById(createReferralDto.resumeId);
+			if (!resume) {
+				throw new HttpException(404, `Resume with id ${createReferralDto.resumeId} not found. Please make sure the resume was uploaded successfully.`);
+			}
+			resumeToAssociate = resume;
+			
+			// Fire-and-forget: Call the background task without 'await'.
+			resumeService.screenResumeInBackground(
+				createReferralDto.resumeId,
+				createReferralDto.jobPostingId
+			);
+			this.logger.info(`Dispatched background screening for resumeId: ${createReferralDto.resumeId}`);
+		}
+
 		const referral = new Referral();
 		referral.jobPosting = existingJobPosting;
 		referral.referrer = referrer;
 		referral.referred = referredPerson;
-		referral.resume = createReferralDto.resume;
+		referral.resume = resumeToAssociate;
 
 		const savedReferral = await this.referralRepository.createReferral(
 			referral
