@@ -1,6 +1,6 @@
 import Candidate from "../entities/candidate.entity";
 import CandidateRepository from "../repositories/candidate.repository";
-import PersonService, { personService } from "./person.service";
+import  { personService } from "../routes/person.routes";
 import { CreateCandidateDto } from "../dto/create-candidate-dto";
 import HttpException from "../exception/httpException";
 import { LoggerService } from "./logger.service";
@@ -11,8 +11,7 @@ class CandidateService {
     private logger = LoggerService.getInstance(CandidateService.name);
 
     constructor(
-        private candidateRepository: CandidateRepository,
-        private personService: PersonService
+        private candidateRepository: CandidateRepository
     ) {}
 
     async createCandidate(createCandidateDto: CreateCandidateDto): Promise<Candidate> {
@@ -23,7 +22,7 @@ class CandidateService {
         newPerson.email= createCandidateDto.person.email;     
         newPerson.role = UserRole.CANDIDATE 
         console.log(newPerson);
-        const person = await this.personService.createPerson(newPerson);
+        const person = await personService.createPerson(newPerson);
 
         // Create the candidate and link to person
         const candidate = new Candidate();
@@ -64,7 +63,7 @@ class CandidateService {
 
         // Update person details
         if (updateCandidateDto.person) {
-            await this.personService.updatePerson(existingCandidate.person.id, updateCandidateDto.person);
+            await personService.updatePerson(existingCandidate.person.id, updateCandidateDto.person);
         }
 
         // Update candidate details
@@ -91,4 +90,4 @@ class CandidateService {
 export default CandidateService;
 
 const candidateRepository = new CandidateRepository(dataSource.getRepository(Candidate));
-export const candidateService = new CandidateService(candidateRepository,personService);
+export const candidateService = new CandidateService(candidateRepository);

@@ -4,7 +4,8 @@ import { Person } from "../entities/person.entity";
 import HttpException from "../exception/httpException";
 import EmployeeRepository from "../repositories/employee.repository";
 import { LoggerService } from "./logger.service";
-import PersonService, { personService } from "./person.service";
+import PersonService from "./person.service";
+import { personService } from "../routes/person.routes";
 
 class EmployeeService {
     private logger = LoggerService.getInstance(EmployeeService.name);
