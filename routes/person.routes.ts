@@ -3,7 +3,7 @@ import dataSource from "../db/data-source";
 import { Person } from "../entities/person.entity";
 import PersonRepository from "../repositories/person.repository";
 import PersonService from "../services/person.service";
-import PersonController from "../controllers/person.controler";
+import PersonController from "../controllers/person.controller";
 
 
 export const personRouter = express.Router();
