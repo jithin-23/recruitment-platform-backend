@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { JwtPayload } from "jsonwebtoken";
+import { CustomJwtPayload } from "../dto/jwt-payload";
 import HttpException from "../exception/httpException";
 import { LoggerService } from "./logger.service";
 import jwt from "jsonwebtoken";
@@ -34,7 +34,7 @@ class AuthService {
             throw new HttpException(401, "Incorrect password entry");
         }
 
-        const payload: JwtPayload = {
+        const payload: CustomJwtPayload = {
             personId: person.id,
             personName: person.name,
             employeeId: employee.id,

@@ -8,12 +8,14 @@ import resumeRouter from "./routes/resume.routes";
 import referralRouter from "./routes/referral.route";
 import notificationRouter from "./routes/notification.routes";
 import bonusRouter from "./routes/bonus.routes";
+import { authMiddleware } from "./middlewares/authMiddleware";
 
 const server = express();
 
 server.use(express.json());
 server.use( cors() )
 server.use("/auth",authRouter);
+server.use(authMiddleware); // Apply authentication middleware to all routes after /auth
 server.use("/jobpostings",jobPostingRouter);
 server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter);
