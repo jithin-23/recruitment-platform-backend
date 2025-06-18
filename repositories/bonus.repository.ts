@@ -11,7 +11,10 @@ class BonusRepository {
   async findMany(): Promise<Bonus[]> {
     return this.repository.find({
       relations: {
-        referral: true,
+        referral: {
+          referred:true,
+          referrer:true
+        },
       },
     });
   }
@@ -20,7 +23,10 @@ class BonusRepository {
     return this.repository.findOne({
       where: { id },
       relations: {
-        referral: true,
+         referral: {
+          referred:true,
+          referrer:true
+        },
       },
     });
   }
