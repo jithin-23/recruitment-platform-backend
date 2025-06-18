@@ -108,7 +108,7 @@ class NotificationService {
         );
     }
 
-    async getNotificationsByReferralId(
+    async getNotificationsByRecipientAndReferralId(
         referral_id: number
     ): Promise<Notification[]> {
         const referral = await referralService.getReferralById(referral_id);
@@ -120,7 +120,7 @@ class NotificationService {
         }
 
         const notifications =
-            await this.notificationRepository.findByReferralId(referral_id);
+            await this.notificationRepository.findByRecipientAndReferralId(referral.referred.id,referral_id);
         this.logger.info(
             `All notifications fetched for referralId: ${referral_id}`
         );

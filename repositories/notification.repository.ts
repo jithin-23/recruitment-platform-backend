@@ -18,9 +18,16 @@ class NotificationRepository {
         });
     }
 
-    async findByRecipientId(recipient_id: number): Promise<Notification[]> {
+
+    async findByRecipientAndReferralId(recipient_id: number,referral_id:number): Promise<Notification[]> {
         return this.repository.find({
-            where: { recipient: { id: recipient_id } },
+            where: { recipient: { id: recipient_id } ,referral: { id: referral_id }},
+        });
+    }
+
+     async findByRecipientId(recepient_id: number): Promise<Notification[]> {
+        return this.repository.find({
+            where: { recipient: { id: recepient_id } },
         });
     }
 
