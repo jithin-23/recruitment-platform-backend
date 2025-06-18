@@ -8,7 +8,7 @@ class NotificationController {
     ) {
         router.get(
             "/referral/:id",
-            this.getNotificationsByReferralId.bind(this)
+            this.getNotificationsByRecipientAndReferralId.bind(this)
         );
         router.get("/person/:id", this.getNotificationByPersonId.bind(this));
         router.patch("/:id/read", this.markAsRead.bind(this));
@@ -19,7 +19,7 @@ class NotificationController {
         router.post("/notify/person", this.notifyPerson.bind(this));
     }
 
-    async getNotificationsByReferralId(
+    async getNotificationsByRecipientAndReferralId(
         req: Request,
         res: Response,
         next: NextFunction
@@ -27,7 +27,7 @@ class NotificationController {
         try {
             const referral_id = Number(req.params.id);
             const notifications =
-                await this.notificationService.getNotificationsByReferralId(
+                await this.notificationService.getNotificationsByRecipientAndReferralId(
                     referral_id
                 );
             res.status(200).send(notifications);
