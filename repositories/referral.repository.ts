@@ -70,8 +70,7 @@ class ReferralRepository {
 	async findByReferrer(referrerId: number): Promise<Referral[]> {
 		return this.repository.find({
 			where: {
-				referrer: { id: referrerId },
-				deletedAt: null,
+				referrer: { id: referrerId }
 			},
 			relations: {
 				jobPosting: true,

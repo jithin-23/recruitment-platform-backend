@@ -15,6 +15,7 @@ class ReferralController {
         router.get("/", this.getAllReferrals.bind(this));
         router.get("/:id", this.getReferralById.bind(this));
         router.get("/response/:id", this.getReferralResponseById.bind(this));
+        router.get("/employee/:id", this.gerReferralByReferrerId.bind(this));
         router.patch("/:id", this.updateReferralStatus.bind(this));
     }
 
@@ -70,7 +71,17 @@ class ReferralController {
             next(err);
         }
     }
+
+    async gerReferralByReferrerId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const referrerId = Number(req.params.id);
+            const referrals = await this.referralService.getReferralsByReferrer(referrerId);
+            res.status(200).json(referrals);
+        } catch (err) {
+            next(err);
+        }
     
+}
 }
 
 export default ReferralController;
