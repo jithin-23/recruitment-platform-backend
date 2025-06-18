@@ -5,22 +5,25 @@ import { CreateJobPostingDto } from "../dto/create-jobposting.dto";
 import { validate } from "class-validator";
 import HttpException from "../exception/httpException";
 import { UpdateJobPostingDto } from "../dto/update-jobposting.dto";
+import { createAuthorizationMiddleware } from "../middlewares/authorizationMiddleware";
+import { UserRole } from "../entities/person.entity";
 
 class JobPostingController {
     constructor(
         private jobPostingService: JobPostingService,
         private router: Router
     ) {
-        router.post("/", this.createJobPosting.bind(this));
+        router.post("/", createAuthorizationMiddleware(UserRole.ADMIN), this.createJobPosting.bind(this));
         router.get("/", this.getAllJobPostings.bind(this));
         router.get("/:id", this.getJobPostingById.bind(this));
-        router.put("/:id", this.updateJobPosting.bind(this));
-        router.patch("/:id", this.updateJobPosting.bind(this));
+        router.put("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
+        router.patch("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
         router.patch(
             "/:id/decrement",
+            createAuthorizationMiddleware(UserRole.ADMIN),
             this.decrementRemainingPositions.bind(this)
         );
-        router.delete("/:id", this.deleteJobPosting.bind(this));
+        router.delete("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.deleteJobPosting.bind(this));
     }
 
     async createJobPosting(req: Request, res: Response, next: NextFunction) {
