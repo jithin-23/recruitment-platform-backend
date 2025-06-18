@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { FindManyOptions, Repository } from "typeorm";
 import Bonus from "../entities/bonus.entity";
 
 class BonusRepository {
@@ -41,6 +41,10 @@ class BonusRepository {
 
   async remove(bonus: Bonus): Promise<void> {
     await this.repository.remove(bonus);
+  }
+
+  async find(options: FindManyOptions<Bonus>): Promise<Bonus[]> {
+    return this.repository.find(options);
   }
 }
 

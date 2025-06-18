@@ -10,6 +10,7 @@ class BonusController {
 
     async getAllBonuses(req: Request, res: Response, next: NextFunction) {
         try {
+            await this.bonusService.updateOverdueBonuses(); // Lazy update
             const bonuses = await this.bonusService.getAllBonuses();
             res.status(200).json(bonuses);
         } catch (error) {
@@ -23,6 +24,7 @@ class BonusController {
         next: NextFunction
     ) {
         try {
+            await this.bonusService.updateOverdueBonuses(); // Lazy update
             const employeeId = parseInt(req.params.id);
             const bonuses = await this.bonusService.getBonusesByEmployee(
                 employeeId
