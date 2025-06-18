@@ -108,6 +108,16 @@ class ReferralService {
 		const savedReferral = await this.referralRepository.createReferral(
 			referral
 		);
+        
+        const referralLog =
+			await referralStatusHistoryService.createReferralLog(
+				savedReferral
+			);
+		if (referralLog) {
+			this.logger.info(
+				`Created log for id: ${savedReferral.id} with updated status: ${referralLog.status}`
+			);
+		}
 
 		this.logger.info(
 			`Created Referral (id: ${savedReferral.id}) for job: ${savedReferral.jobPosting?.title}`
@@ -225,9 +235,11 @@ class ReferralService {
 			);
 		}
 		for (const referral of existingReferrals) {
+            if(referral.status!== ReferralStatus.ACCEPTED) {
 			referral.status = ReferralStatus.REJECTED;
 			await this.referralRepository.updateReferral(referral.id, referral);
 		}
+    }
 		this.logger.info(
 			`Rejected all referrals for referred id: ${referredId}`
 		);
@@ -243,9 +255,11 @@ class ReferralService {
 			);
 		}
 		for (const referral of existingReferrals) {
+            if(referral.status !== ReferralStatus.ACCEPTED) {
 			referral.status = ReferralStatus.REJECTED;
 			await this.referralRepository.updateReferral(referral.id, referral);
 		}
+     }
 		this.logger.info(
 			`Rejected all referrals for jobPosting id: ${jobPostingId}`
 		);
