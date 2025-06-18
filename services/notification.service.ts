@@ -65,8 +65,6 @@ class NotificationService {
     }
 
     async notifyReferralStatusChange(
-        referrerId: number,
-        referredId: number,
         referral_id: number
     ): Promise<void> {
         const referral = await referralService.getReferralById(referral_id);
@@ -100,13 +98,13 @@ class NotificationService {
         await this.notifyPerson(
             title,
             contentForCandidate,
-            referredId,
+            referral.referred.id,
             referral_id
         );
         await this.notifyPerson(
             title,
             contentForEmployee,
-            referrerId,
+            referral.referrer.id,
             referral_id
         );
     }
