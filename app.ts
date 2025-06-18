@@ -17,13 +17,13 @@ const server = express();
 server.use(express.json());
 server.use( cors() )
 server.use("/auth",authRouter);
-server.use(authMiddleware); // Apply authentication middleware to all routes after /auth
-server.use("/jobpostings",jobPostingRouter);
 server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter);
 server.use("/notifications",notificationRouter);
 server.use("/bonus", bonusRouter);
 server.use("/person",personRouter)
+server.use(authMiddleware); // Apply authentication middleware to all routes after /auth
+server.use("/jobpostings",jobPostingRouter);
 
 server.use(errorMiddleware);
 
