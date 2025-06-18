@@ -4,6 +4,7 @@ import { plainToInstance } from "class-transformer";
 import { CreateReferralDto } from "../dto/create-referral-dto";
 import { validate } from "class-validator";
 import HttpException from "../exception/httpException";
+import { conversionService } from "../services/conversion.service";
 
 
 class ReferralController {
@@ -17,6 +18,31 @@ class ReferralController {
         router.get("/response/:id", this.getReferralResponseById.bind(this));
         router.get("/employee/:id", this.gerReferralByReferrerId.bind(this));
         router.patch("/:id", this.updateReferralStatus.bind(this));
+        router.post("/:id/convert", this.convertReferralToEmployee.bind(this));
+    }
+
+    async convertReferralToEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            const referralId = Number(req.params.id);
+            const { joiningDate } = req.body;
+
+            if (!joiningDate) {
+                throw new HttpException(400, "joiningDate is required.");
+            }
+            
+            const parsedJoiningDate = new Date(joiningDate);
+            if (isNaN(parsedJoiningDate.getTime())) {
+                throw new HttpException(400, "Invalid joiningDate format.");
+            }
+
+            const newEmployee = await conversionService.convertReferralToEmployee(referralId, parsedJoiningDate);
+
+            res.status(201).json({ 
+                newEmployee
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
     async createReferral(req: Request, res: Response, next: NextFunction) {
