@@ -8,6 +8,7 @@ import resumeRouter from "./routes/resume.routes";
 import referralRouter from "./routes/referral.route";
 import notificationRouter from "./routes/notification.routes";
 import bonusRouter from "./routes/bonus.routes";
+import { personRouter } from "./routes/person.routes";
 
 const server = express();
 
@@ -19,6 +20,7 @@ server.use("/resume", resumeRouter);
 server.use("/referral",referralRouter);
 server.use("/notifications",notificationRouter);
 server.use("/bonus", bonusRouter);
+server.use("/person",personRouter)
 
 server.use(errorMiddleware);
 

@@ -1,4 +1,3 @@
-import dataSource from "../db/data-source";
 import { CreatePersonDto } from "../dto/create-person-dto";
 import { Person } from "../entities/person.entity";
 import HttpException from "../exception/httpException";
@@ -76,9 +75,7 @@ async updatePerson(id: number, updatePersonDto: CreatePersonDto): Promise<void> 
     }
 }
 
-const personRepository = new PersonRepository(dataSource.getRepository(Person));
-const personService = new PersonService(personRepository);
-export {personService};
+
 
 export default PersonService;
 

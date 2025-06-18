@@ -1,4 +1,3 @@
-import dataSource from "../db/data-source";
 import Notification, {
     NotificaitonStatus,
 } from "../entities/notification.entity";
@@ -7,7 +6,7 @@ import HttpException from "../exception/httpException";
 import NotificationRepository from "../repositories/notification.repository";
 import { referralService } from "../routes/referral.route";
 import { LoggerService } from "./logger.service";
-import { personService } from "./person.service";
+import { personService } from "../routes/person.routes";
 
 class NotificationService {
     constructor(private notificationRepository: NotificationRepository) {}

@@ -3,7 +3,7 @@ import ReferralRepository from "../repositories/referral.repository";
 import { CreateReferralDto } from "../dto/create-referral-dto";
 import HttpException from "../exception/httpException";
 import { LoggerService } from "./logger.service";
-import { personService } from "./person.service";
+import { personService } from "../routes/person.routes";
 import { candidateService } from "./candidate.service";
 import { jobPostingService } from "../routes/jobposting.routes";
 import { ReferralResponseDto } from "../dto/referral-response.dto";

@@ -1,7 +1,7 @@
 import express from "express";
 import AuthService from "../services/auth.service";
 import AuthController from "../controllers/auth.controller";
-import { personService } from "../services/person.service";
+import { personService } from "../routes/person.routes";
 import { employeeService } from "../services/employee.service";
 
 const authRouter = express.Router()
