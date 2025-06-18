@@ -28,6 +28,10 @@ class ResumeRepository {
   async update(id: number, resume: Partial<Resume>): Promise<void> {
     await this.repository.update(id, resume);
   }
+
+  async updateScoreAndSkills(id: number, resumeScore: number, skills: string): Promise<void> {
+   await this.repository.update(id, { resumeScore, skills });
+  }
 }
 
 export default ResumeRepository;
