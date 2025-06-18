@@ -32,6 +32,18 @@ class ReferralRepository {
 		});
 	}
 
+  	async findByreferred(referredId: number): Promise<Referral[]> {
+		return this.repository.find({
+			where: { referred:{id:referredId}, deletedAt: null }
+		});
+	}
+
+  async findByJobPostingId(JobPostingId: number): Promise<Referral[]> {
+		return this.repository.find({
+			where: { jobPosting:{id:JobPostingId}, deletedAt: null }
+		});
+	}
+
 	async findReferralHistory(id: number): Promise<Referral> {
 		return this.repository.findOne({
 			where: { id },

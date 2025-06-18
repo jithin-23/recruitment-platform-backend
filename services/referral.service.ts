@@ -10,6 +10,7 @@ import { ReferralResponseDto } from "../dto/referral-response.dto";
 import ReferralStatusHistory from "../entities/referralstatushistory.entity";
 import { resumeService } from "../routes/resume.routes";
 import Resume from "../entities/resume.entity";
+import { referralStatusHistoryService } from "./referralstatushistory.service";
 
 class ReferralService {
 	private logger = LoggerService.getInstance(ReferralService.name);
@@ -161,6 +162,53 @@ class ReferralService {
 			existingReferral
 		);
 		this.logger.info(`Updated Referral status to ${status} for id: ${id}`);
+
+		const referralLog =
+			await referralStatusHistoryService.createReferralLog(
+				updatedReferral
+			);
+		if (referralLog) {
+			this.logger.info(
+				`Created log for id: ${id} with updated status: ${referralLog.status}`
+			);
+		}
+	}
+
+	async rejectRefferalsByreferredId(referredId: number): Promise<void> {
+		const existingReferrals = await this.referralRepository.findByreferred(
+			referredId
+		);
+		if (!existingReferrals) {
+			throw new HttpException(
+				404,
+				`Referrals for referred id ${referredId} not found`
+			);
+		}
+		for (const referral of existingReferrals) {
+			referral.status = ReferralStatus.REJECTED;
+			await this.referralRepository.updateReferral(referral.id, referral);
+		}
+		this.logger.info(
+			`Rejected all referrals for referred id: ${referredId}`
+		);
+	}
+
+	async rejectRefferalsByJobPostingId(jobPostingId: number): Promise<void> {
+		const existingReferrals =
+			await this.referralRepository.findByJobPostingId(jobPostingId);
+		if (!existingReferrals) {
+			throw new HttpException(
+				404,
+				`Referrals for jobPosting id ${jobPostingId} not found`
+			);
+		}
+		for (const referral of existingReferrals) {
+			referral.status = ReferralStatus.REJECTED;
+			await this.referralRepository.updateReferral(referral.id, referral);
+		}
+		this.logger.info(
+			`Rejected all referrals for jobPosting id: ${jobPostingId}`
+		);
 	}
 
 	async getReferralHistory(id: number): Promise<Referral> {

@@ -3,6 +3,7 @@ import { UpdateJobPostingDto } from "../dto/update-jobposting.dto";
 import JobPosting from "../entities/jobposting.entity";
 import HttpException from "../exception/httpException";
 import JobPostingRepository from "../repositories/jobposting.repository";
+import { referralService } from "../routes/referral.route";
 import { LoggerService } from "./logger.service";
 
 class JobPostingService {
@@ -139,7 +140,10 @@ class JobPostingService {
             );
         }
         jobPosting.remainingPositions -= 1;
-
+        if(jobPosting.remainingPositions===0){
+           await referralService.rejectRefferalsByJobPostingId(jobPosting.id);
+           this.logger.info(`All referrals for job posting with id ${id} have been rejected`)
+        }
         await this.jobPostingRepository.update(id, jobPosting);
 
         this.logger.info(

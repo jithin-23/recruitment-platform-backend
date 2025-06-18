@@ -11,6 +11,7 @@ class CandidateRepository {
 
   async findMany(): Promise<Candidate[]> {
     return this.repository.find({
+      where: { deletedAt: null },
       relations: {
         person: true,
       },
@@ -19,7 +20,7 @@ class CandidateRepository {
 
   async findOneById(id: number): Promise<Candidate | null> {
     return this.repository.findOne({
-      where: { id },
+      where: { id,deletedAt: null },
       relations: {
         person: true,
       },
@@ -29,7 +30,7 @@ class CandidateRepository {
 
 
   async delete(id: number): Promise<void> {
-    await this.repository.delete({ id });
+    await this.repository.softDelete({ id });
   }
 
   async remove(candidate: Candidate): Promise<void> {
