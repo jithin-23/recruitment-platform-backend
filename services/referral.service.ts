@@ -44,6 +44,16 @@ class ReferralService {
             );
         }
 
+           if(referredPerson){
+            referredPerson.name = createReferralDto.referred.person.name;
+            referredPerson.phone = createReferralDto.referred.person.phone;
+            // Update the person details if they already exist
+            await personService.updatePerson(referredPerson.id, referredPerson);
+            this.logger.info(
+                `Updated existing referred person with id: ${referredPerson.id}`
+            );
+        }
+        
 		if (!referredPerson) {
 			// Create candidate (which creates person)
 			const candidate = await candidateService.createCandidate({
