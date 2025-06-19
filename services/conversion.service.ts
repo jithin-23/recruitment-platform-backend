@@ -114,11 +114,11 @@ class ConversionService {
 
             await notificationService.notifyPerson(
                 "Referral Success!",
-                `Great news! Your referral, ${
+                `Your referral, ${
                     personToHire.name
                 }, has accepted the offer. Your bonus of ${
                     bonus.bonusAmount
-                } will be due on ${bonus.triggerDate.toDateString()}.`,
+                } will be due.`,
                 referral.referrer.id,
                 referral.id
             );

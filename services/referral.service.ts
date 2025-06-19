@@ -40,7 +40,7 @@ class ReferralService {
         if(referredPerson && referredPerson?.role !== UserRole.CANDIDATE) {
             throw new HttpException(
                 400,
-                `Referred person with email ${createReferralDto.referred.person.email} exists as an Empoyee.`
+                `Referred person with email ${createReferralDto.referred.person.email} exists as an Employee.`
             );
         }
 
@@ -140,13 +140,13 @@ class ReferralService {
 
         await notificationService.notifyPerson(
             `New Referral Submitted`,
-            `A new referral has been submitted for the position "${savedReferral.jobPosting.title}" Candidate: ${savedReferral.referred.name}.`,
+            `Referral submitted for "${savedReferral.jobPosting.title}" Candidate: ${savedReferral.referred.name}.`,
             savedReferral.referrer.id,
             savedReferral.id
         );
         await notificationService.notifyPerson(
             `New Referral Submitted`,
-            `A new referral has been submitted for the position "${savedReferral.jobPosting.title}" by ${savedReferral.referrer.name}.`,
+            `Referral submitted for "${savedReferral.jobPosting.title}" by ${savedReferral.referrer.name}.`,
             savedReferral.referred.id,
             savedReferral.id
         );
