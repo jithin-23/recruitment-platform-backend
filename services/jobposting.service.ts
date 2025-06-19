@@ -8,169 +8,188 @@ import { referralService } from "../routes/referral.route";
 import { LoggerService } from "./logger.service";
 
 class JobPostingService {
-	private logger = LoggerService.getInstance(JobPostingService.name);
-	constructor(private jobPostingRepository: JobPostingRepository) {}
+    private logger = LoggerService.getInstance(JobPostingService.name);
+    constructor(private jobPostingRepository: JobPostingRepository) {}
 
-	async createJobPosting(
-		createJobPostingDto: CreateJobPostingDto
-	): Promise<JobPosting> {
-		const newJobPosting = new JobPosting();
-		newJobPosting.title = createJobPostingDto.title;
-		newJobPosting.description = createJobPostingDto.description;
-		newJobPosting.skills = createJobPostingDto.skills;
-		newJobPosting.location = createJobPostingDto.location;
-		newJobPosting.numOfPositions = createJobPostingDto.numOfPositions;
-		newJobPosting.experience = createJobPostingDto.experience;
-		newJobPosting.salary = createJobPostingDto.salary;
-		newJobPosting.bonusForReferral = createJobPostingDto.bonusForReferral;
-		newJobPosting.remainingPositions = createJobPostingDto.numOfPositions;
+    async createJobPosting(
+        createJobPostingDto: CreateJobPostingDto
+    ): Promise<JobPosting> {
+        const newJobPosting = new JobPosting();
+        newJobPosting.title = createJobPostingDto.title;
+        newJobPosting.description = createJobPostingDto.description;
+        newJobPosting.skills = createJobPostingDto.skills;
+        newJobPosting.location = createJobPostingDto.location;
+        newJobPosting.numOfPositions = createJobPostingDto.numOfPositions;
+        newJobPosting.experience = createJobPostingDto.experience;
+        newJobPosting.salary = createJobPostingDto.salary;
+        newJobPosting.bonusForReferral = createJobPostingDto.bonusForReferral;
 
-		const savedJob = await this.jobPostingRepository.create(newJobPosting);
+        const savedJob = await this.jobPostingRepository.create(newJobPosting);
 
-		this.logger.info(
-			`Created Job Posting (${savedJob.title}) with id: ${savedJob.id}`
-		);
+        this.logger.info(
+            `Created Job Posting (${savedJob.title}) with id: ${savedJob.id}`
+        );
 
-		return savedJob;
-	}
+        return savedJob;
+    }
 
-	async getAllJobPostings(): Promise<JobPosting[]> {
-		const allJobPosting = await this.jobPostingRepository.findMany();
-		this.logger.info(`All Job Postings Fetched`);
-		return allJobPosting;
-	}
+    async getAllJobPostings(): Promise<JobPosting[]> {
+        const allJobPosting = await this.jobPostingRepository.findMany();
+        this.logger.info(`All Job Postings Fetched`);
+        return allJobPosting;
+    }
 
-	async getJobPostingById(id: number): Promise<JobPosting> {
-		const jobPosting = await this.jobPostingRepository.findOneById(id);
-		if (!jobPosting) {
-			throw new HttpException(404, `Job posting with id ${id} not found`);
-		}
-		this.logger.info(`Fetched Job posting with id: ${id}`);
-		return jobPosting;
-	}
+    async getJobPostingById(id: number): Promise<JobPosting> {
+        const jobPosting = await this.jobPostingRepository.findOneById(id);
+        if (!jobPosting) {
+            throw new HttpException(404, `Job posting with id ${id} not found`);
+        }
+        this.logger.info(`Fetched Job posting with id: ${id}`);
+        return jobPosting;
+    }
 
-	async getJobPostingByTitle(title: string): Promise<JobPosting> {
-		const jobPosting = await this.jobPostingRepository.findOneByTitle(
-			title
-		);
-		if (!jobPosting) {
-			throw new HttpException(
-				404,
-				`Job posting with title "${title}" not found`
-			);
-		}
-		this.logger.info(`Fetched Job posting with title: ${title}`);
-		return jobPosting;
-	}
+    async getJobPostingByTitle(title: string): Promise<JobPosting> {
+        const jobPosting = await this.jobPostingRepository.findOneByTitle(
+            title
+        );
+        if (!jobPosting) {
+            throw new HttpException(
+                404,
+                `Job posting with title "${title}" not found`
+            );
+        }
+        this.logger.info(`Fetched Job posting with title: ${title}`);
+        return jobPosting;
+    }
 
-	async updateJobPosting(
-		id: number,
-		updateJobPostingDto: UpdateJobPostingDto
-	): Promise<void> {
-		const existingJobPosting = await this.jobPostingRepository.findOneById(
-			id
-		);
-		if (!existingJobPosting) {
-			throw new HttpException(404, "Job Posting not found");
-		}
+    async updateJobPosting(
+        id: number,
+        updateJobPostingDto: UpdateJobPostingDto
+    ): Promise<void> {
+        const existingJobPosting = await this.jobPostingRepository.findOneById(
+            id
+        );
+        if (!existingJobPosting) {
+            throw new HttpException(404, "Job Posting not found");
+        }
 
-		if (updateJobPostingDto.title !== undefined)
-			existingJobPosting.title = updateJobPostingDto.title;
+        if (updateJobPostingDto.title !== undefined)
+            existingJobPosting.title = updateJobPostingDto.title;
 
-		if (updateJobPostingDto.description !== undefined)
-			existingJobPosting.description = updateJobPostingDto.description;
+        if (updateJobPostingDto.description !== undefined)
+            existingJobPosting.description = updateJobPostingDto.description;
 
-		if (updateJobPostingDto.skills !== undefined)
-			existingJobPosting.skills = updateJobPostingDto.skills;
+        if (updateJobPostingDto.skills !== undefined)
+            existingJobPosting.skills = updateJobPostingDto.skills;
 
-		if (updateJobPostingDto.location !== undefined)
-			existingJobPosting.location = updateJobPostingDto.location;
+        if (updateJobPostingDto.location !== undefined)
+            existingJobPosting.location = updateJobPostingDto.location;
 
-		if (updateJobPostingDto.numOfPositions !== undefined) {
-			if (
-				updateJobPostingDto.numOfPositions <
-				existingJobPosting.remainingPositions
-			) {
-				existingJobPosting.remainingPositions =
-					updateJobPostingDto.numOfPositions;
-			}
-			existingJobPosting.numOfPositions =
-				updateJobPostingDto.numOfPositions;
-		}
+        if (updateJobPostingDto.experience !== undefined)
+            existingJobPosting.experience = updateJobPostingDto.experience;
 
-		if (updateJobPostingDto.remainingPositions !== undefined) {
-			if (
-				updateJobPostingDto.remainingPositions >
-				existingJobPosting.numOfPositions
-			)
-				throw new HttpException(
-					400,
-					"Remaining position cannot be greater than total number of positions"
-				);
-			existingJobPosting.remainingPositions =
-				updateJobPostingDto.remainingPositions;
-		}
+        if (updateJobPostingDto.salary !== undefined)
+            existingJobPosting.salary = updateJobPostingDto.salary;
 
-		if (updateJobPostingDto.experience !== undefined)
-			existingJobPosting.experience = updateJobPostingDto.experience;
+        if (updateJobPostingDto.bonusForReferral !== undefined)
+            existingJobPosting.bonusForReferral =
+                updateJobPostingDto.bonusForReferral;
 
-		if (updateJobPostingDto.salary !== undefined)
-			existingJobPosting.salary = updateJobPostingDto.salary;
+        // Update numOfPositions
+        if (updateJobPostingDto.numOfPositions !== undefined) {
+            if (
+                existingJobPosting.filledPositions >
+                updateJobPostingDto.numOfPositions
+            ) {
+                throw new HttpException(
+                    400,
+                    "Number of positions cannot be less than the number of already filled positions"
+                );
+            }
+            existingJobPosting.numOfPositions =
+                updateJobPostingDto.numOfPositions;
+        }
 
-		if (updateJobPostingDto.bonusForReferral !== undefined)
-			existingJobPosting.bonusForReferral =
-				updateJobPostingDto.bonusForReferral;
+        // Update filledPositions
+        if (updateJobPostingDto.filledPositions !== undefined) {
+            if (
+                updateJobPostingDto.filledPositions >
+                existingJobPosting.numOfPositions
+            ) {
+                throw new HttpException(
+                    400,
+                    "Filled positions cannot exceed total number of positions"
+                );
+            }
+            existingJobPosting.filledPositions =
+                updateJobPostingDto.filledPositions;
+        }
 
-		await this.jobPostingRepository.update(id, existingJobPosting);
+        await this.jobPostingRepository.update(id, existingJobPosting);
 
-		this.logger.info(
-			`Updated Job Posting (${existingJobPosting.title}) with id: ${existingJobPosting.id}`
-		);
-	}
+        this.logger.info(
+            `Updated Job Posting (${existingJobPosting.title}) with id: ${existingJobPosting.id}`
+        );
+    }
 
-	async decrementRemainingPositions(id: number): Promise<void> {
-		const jobPosting = await this.jobPostingRepository.findOneById(id);
-		if (!jobPosting) {
-			throw new HttpException(404, `Job posting with id ${id} not found`);
-		}
+    async incrementFilledPosition(id: number): Promise<void> {
+        const jobPosting = await this.jobPostingRepository.findOneById(id);
+        if (!jobPosting) {
+            throw new HttpException(404, `Job posting with id ${id} not found`);
+        }
 
-		if (jobPosting.remainingPositions <= 0) {
-			throw new HttpException(
-				400,
-				`No remaining positions available for job posting with id ${id}`
-			);
-		}
-		jobPosting.remainingPositions -= 1;
-		if (jobPosting.remainingPositions === 0) {
-			await referralService.rejectRefferalsByJobPostingId(jobPosting.id);
-			this.logger.info(
-				`All referrals for job posting with id ${id} have been rejected`
-			);
-			await notificationService.notifyAllAdmins(
-				`Positions for "${jobPosting.title}" have been filled. `,
-				`All referrals for this job posting have been rejected.`
-			);
-		}
-		await this.jobPostingRepository.update(id, jobPosting);
+        if (jobPosting.filledPositions >= jobPosting.numOfPositions) {
+            throw new HttpException(
+                400,
+                `No remaining positions available for job posting with id ${id}`
+            );
+        }
 
-		this.logger.info(
-			`JobPosting ${id} remainingPositions decremented to ${jobPosting.remainingPositions}`
-		);
-	}
+        jobPosting.filledPositions += 1;
+        await this.jobPostingRepository.update(id, jobPosting);
 
-	async deleteJobPosting(id: number): Promise<void> {
-		const existingJobPosting = await this.jobPostingRepository.findOneById(
-			id
-		);
-		if (!existingJobPosting) {
-			throw new HttpException(404, `Job posting with id ${id} not found`);
-		}
+        this.logger.info(
+            `JobPosting with id: ${id} filledPositions incremented to ${jobPosting.filledPositions}`
+        );
 
-		await this.jobPostingRepository.delete(id);
-		this.logger.info(
-			`Deleted Job Posting (${existingJobPosting.title}) with id: ${existingJobPosting.id}`
-		);
-	}
+        if (jobPosting.filledPositions === jobPosting.numOfPositions) {
+            await referralService.rejectRefferalsByJobPostingId(jobPosting.id);
+
+            this.logger.info(
+                `All referrals for job posting with id ${id} have been rejected since all positions are filled`
+            );
+
+            await notificationService.notifyAllAdmins(
+                `"${jobPosting.title}" is now closed.`,
+                `All positions are filled.`
+            );
+
+            this.logger.info(
+                `Deleting JobPosting with id: ${id} since all positions have been filled`
+            );
+
+            await this.jobPostingRepository.softDelete(id);
+
+            await notificationService.notifyAllAdmins(
+                `"${jobPosting.title}" deleted.`,
+                `Job posting closed.`
+            );
+        }
+    }
+
+    async deleteJobPosting(id: number): Promise<void> {
+        const existingJobPosting = await this.jobPostingRepository.findOneById(
+            id
+        );
+        if (!existingJobPosting) {
+            throw new HttpException(404, `Job posting with id ${id} not found`);
+        }
+
+        await this.jobPostingRepository.softDelete(id);
+        this.logger.info(
+            `Deleted Job Posting (${existingJobPosting.title}) with id: ${existingJobPosting.id}`
+        );
+    }
 }
 
 export default JobPostingService;

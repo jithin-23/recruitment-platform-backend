@@ -48,7 +48,7 @@ class ConversionService {
                     400,
                     "Referral must be associated with a existing job posting."
                 );
-            if (referral.jobPosting.remainingPositions < 1)
+            if (referral.jobPosting.filledPositions >= referral.jobPosting.numOfPositions)
                 throw new HttpException(
                     400,
                     `No remaining positions for job: ${referral.jobPosting.title}`
@@ -87,8 +87,8 @@ class ConversionService {
                 );
             }
 
-            // 4. Decrement Job Posting Positions
-            await jobPostingService.decrementRemainingPositions(
+            // 4. Increment Job Posting Positions
+            await jobPostingService.incrementFilledPosition(
                 referral.jobPosting.id
             );
 

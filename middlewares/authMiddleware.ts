@@ -21,7 +21,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     try{
         const payload=jwt.verify(token,process.env.JWT_SECRET as string) as CustomJwtPayload
         req.user=payload;
-        console.log(payload);
     }catch{
         throw new HttpException(401,"Invalid or expired token")
     }

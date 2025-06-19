@@ -19,8 +19,8 @@ class JobPosting extends AbstractEntity {
     @Column()
     numOfPositions: number;
 
-    @Column()
-    remainingPositions: number;
+    @Column({ default: 0 })
+    filledPositions: number;
 
     @Column()
     experience: number;
@@ -28,7 +28,7 @@ class JobPosting extends AbstractEntity {
     @Column()
     salary: number;
 
-    @OneToMany( () => Referral, (referral) => referral.jobPosting)
+    @OneToMany(() => Referral, (referral) => referral.jobPosting)
     referrals: Referral[];
 
     @Column()
