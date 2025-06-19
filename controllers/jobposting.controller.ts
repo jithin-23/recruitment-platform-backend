@@ -19,7 +19,7 @@ class JobPostingController {
         router.get("/:id", this.getJobPostingById.bind(this));
         router.put("/:id", authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
         router.patch("/:id", authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
-        router.delete("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.deleteJobPosting.bind(this));
+        router.delete("/:id", authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.deleteJobPosting.bind(this));
     }
 
     async createJobPosting(req: Request, res: Response, next: NextFunction) {
