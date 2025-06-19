@@ -6,6 +6,7 @@ import PersonService from "../services/person.service";
 import PersonController from "../controllers/person.controller";
 
 
+
 export const personRouter = express.Router();
 const personRepository = new PersonRepository(dataSource.getRepository(Person));
 const personService = new PersonService(personRepository);
