@@ -7,19 +7,21 @@ import HttpException from "../exception/httpException";
 import { UpdateJobPostingDto } from "../dto/update-jobposting.dto";
 import { createAuthorizationMiddleware } from "../middlewares/authorizationMiddleware";
 import { UserRole } from "../entities/person.entity";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 class JobPostingController {
     constructor(
         private jobPostingService: JobPostingService,
         private router: Router
     ) {
-        router.post("/", createAuthorizationMiddleware(UserRole.ADMIN), this.createJobPosting.bind(this));
+        router.post("/",authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.createJobPosting.bind(this));
         router.get("/", this.getAllJobPostings.bind(this));
         router.get("/:id", this.getJobPostingById.bind(this));
-        router.put("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
-        router.patch("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
+        router.put("/:id", authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
+        router.patch("/:id", authMiddleware,createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
         router.patch(
             "/:id/decrement",
+            authMiddleware,
             createAuthorizationMiddleware(UserRole.ADMIN),
             this.decrementRemainingPositions.bind(this)
         );

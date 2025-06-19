@@ -22,7 +22,6 @@ server.use("/referral",referralRouter);
 server.use("/notifications",notificationRouter);
 server.use("/bonus", bonusRouter);
 server.use("/person",personRouter)
-server.use(authMiddleware); // Apply authentication middleware to all routes after /auth
 server.use("/jobpostings",jobPostingRouter);
 
 server.use(errorMiddleware);
