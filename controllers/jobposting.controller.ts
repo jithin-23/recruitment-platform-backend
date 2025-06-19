@@ -18,11 +18,6 @@ class JobPostingController {
         router.get("/:id", this.getJobPostingById.bind(this));
         router.put("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
         router.patch("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.updateJobPosting.bind(this));
-        router.patch(
-            "/:id/decrement",
-            createAuthorizationMiddleware(UserRole.ADMIN),
-            this.decrementRemainingPositions.bind(this)
-        );
         router.delete("/:id", createAuthorizationMiddleware(UserRole.ADMIN), this.deleteJobPosting.bind(this));
     }
 
@@ -79,22 +74,6 @@ class JobPostingController {
             await this.jobPostingService.updateJobPosting(
                 id,
                 updateJobPostingDto
-            );
-            res.status(204).send();
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async decrementRemainingPositions(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-        try {
-            const jobPostingId = Number(req.params.id);
-            await this.jobPostingService.decrementRemainingPositions(
-                jobPostingId
             );
             res.status(204).send();
         } catch (error) {

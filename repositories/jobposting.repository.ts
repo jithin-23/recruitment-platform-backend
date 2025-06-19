@@ -38,7 +38,7 @@ class JobPostingRepository {
         await this.repository.save({ id, ...job });
     }
 
-    async delete(id: number): Promise<void> {
+    async softDelete(id: number): Promise<void> {
         await this.repository.softDelete({ id });
     }
 }
