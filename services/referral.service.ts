@@ -175,7 +175,7 @@ class ReferralService {
 		} else {
 			response.failedAt = "";
 		}
-		console.log(sortedHistories);
+		
 		(response.id = referral.id),
 			(response.candidateName = referral.referred.name),
 			(response.position = referral.jobPosting.title),
@@ -184,7 +184,7 @@ class ReferralService {
 			(response.currentStatus = referral.status),
 			(response.histories = sortedHistories),
 			this.logger.info(`Fetched Referral with id: ${id}`);
-		console.log(response);
+	
 		return response;
 	}
 
@@ -237,7 +237,7 @@ class ReferralService {
 		for (const referral of existingReferrals) {
             if(referral.status!== ReferralStatus.ACCEPTED) {
 			referral.status = ReferralStatus.REJECTED;
-			await this.referralRepository.updateReferral(referral.id, referral);
+			await this.updateStatus(referral.id, referral.status);
 		}
     }
 		this.logger.info(
@@ -257,7 +257,7 @@ class ReferralService {
 		for (const referral of existingReferrals) {
             if(referral.status !== ReferralStatus.ACCEPTED) {
 			referral.status = ReferralStatus.REJECTED;
-			await this.referralRepository.updateReferral(referral.id, referral);
+			await this.updateStatus(referral.id, referral.status);
 		}
      }
 		this.logger.info(
