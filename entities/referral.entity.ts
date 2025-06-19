@@ -19,9 +19,6 @@ export enum ReferralStatus {
 
 @Entity()
 class Referral extends AbstractEntity {
-	@Column({ default: 0 })
-	currentRound: number;
-
 	@Column({
 		type: "enum",
 		enum: ReferralStatus,
