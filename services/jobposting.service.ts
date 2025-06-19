@@ -163,17 +163,6 @@ class JobPostingService {
                 `"${jobPosting.title}" is now closed.`,
                 `All positions are filled.`
             );
-
-            this.logger.info(
-                `Deleting JobPosting with id: ${id} since all positions have been filled`
-            );
-
-            await this.jobPostingRepository.softDelete(id);
-
-            await notificationService.notifyAllAdmins(
-                `"${jobPosting.title}" deleted.`,
-                `Job posting closed.`
-            );
         }
     }
 
