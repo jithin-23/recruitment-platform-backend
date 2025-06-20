@@ -6,24 +6,16 @@ export class SeedInitialData1749960349607 implements MigrationInterface {
             INSERT INTO person (id, name, phone, email, role) VALUES
             (1,'Alice Johnson', '1234567890', 'alice@example.com', 'ADMIN'),
             (2,'Bob Smith', '0987654321', 'bob@example.com', 'EMPLOYEE'),
-            (3,'Carol Lee', '5555555555', 'carol@example.com', 'CANDIDATE'),
-            (4,'David Miller', '9876543210', 'david.miller@example.com', 'EMPLOYEE'),
-            (5,'Eva Green', '1112223333', 'eva.green@example.com', 'CANDIDATE'),
-            (6,'Frank Harris', '4445556666', 'frank.harris@example.com', 'ADMIN');
+            (3,'David Miller', '9876543210', 'david.miller@example.com', 'EMPLOYEE'),
+            (4,'Frank Harris', '4445556666', 'frank.harris@example.com', 'ADMIN');
         `);
 
         await queryRunner.query(`
             INSERT INTO employee (id,joining_date, password, person_id) VALUES
             (1,'2023-01-15', 'password', 1),
             (2,'2022-08-30', 'password', 2),
-            (3,'2024-03-01', 'password', 4),
-            (4,'2023-11-20', 'password', 6);
-        `);
-
-        await queryRunner.query(`
-            INSERT INTO candidate (id,years_of_experience, person_id) VALUES
-            (1, 4, 3),
-            (2, 2, 5);
+            (3,'2024-03-01', 'password', 3),
+            (4,'2023-11-20', 'password', 4);
         `);
 
         await queryRunner.query(`
@@ -77,13 +69,10 @@ export class SeedInitialData1749960349607 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`DELETE FROM job_posting WHERE id IN (1,2,3);`);
         await queryRunner.query(
-            `DELETE FROM candidate WHERE person_id IN (3, 5);`
+            `DELETE FROM employee WHERE person_id IN (1, 2, 3, 4);`
         );
         await queryRunner.query(
-            `DELETE FROM employee WHERE person_id IN (1, 2, 4, 6);`
-        );
-        await queryRunner.query(
-            `DELETE FROM person WHERE id IN (1, 2, 3, 4, 5, 6);`
+            `DELETE FROM person WHERE id IN (1, 2, 3, 4);`
         );
     }
 }
