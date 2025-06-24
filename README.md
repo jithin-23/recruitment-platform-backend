@@ -1,6 +1,13 @@
 # recruitment-platform-backend
 Backend service for the Recruitment Platform built with Node.js, Express, TypeORM, and PostgreSQL.
 
+## Related Repositories
+
+- **Frontend**: [KV_PROJECT_FE](https://github.com/KiranBabu007/KV_PROJECT_FE) – Web interface for the recruitment platform.
+- **AI Service**: [Resume Screening Service](https://github.com/CheerfulPianissimo/resume-screening-service) – Intelligent resume screening using AI.
+
+---
+
 ## Getting Started
 
 ### 1. Clone the repository and install dependencies
