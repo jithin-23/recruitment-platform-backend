@@ -13,7 +13,7 @@ Backend service for the Recruitment Platform built with Node.js, Express, TypeOR
 ### 1. Clone the repository and install dependencies
 
 ```bash
-git clone https://github.com/yourusername/recruitment-platform-backend.git
+git clone https://github.com/jithin-23/recruitment-platform-backend.git
 cd recruitment-platform-backend
 npm install
 ````
