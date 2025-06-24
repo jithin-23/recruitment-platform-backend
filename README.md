@@ -1,4 +1,5 @@
 # recruitment-platform-backend
+
 Backend service for the Recruitment Platform built with Node.js, Express, TypeORM, and PostgreSQL.
 
 ## Related Repositories
@@ -13,12 +14,15 @@ Backend service for the Recruitment Platform built with Node.js, Express, TypeOR
 ### 1. Clone the repository and install dependencies
 
 ```bash
-git clone https://github.com/jithin-23/recruitment-platform-backend.git
+git clone https://github.com/yourusername/recruitment-platform-backend.git
 cd recruitment-platform-backend
 npm install
 ````
 
-### 2. Setup Database and Environment Variables
+### 2. Set up the Database and Environment Variables
+
+* Create a new PostgreSQL database.
+  The name of the database should match the value you set in the `.env` file under `DB_DATABASE`.
 
 * Copy the example environment file:
 
@@ -26,7 +30,7 @@ npm install
 cp .env.example .env
 ```
 
-* Edit the `.env` file to set your database connection details:
+* Edit the `.env` file to configure your database connection:
 
 ```
 DB_USERNAME=postgres
@@ -35,18 +39,18 @@ DB_HOST=localhost
 DB_DATABASE=recruitment
 DB_PORT=5432
 
-JWT_SECRET = my-super-secret
+JWT_SECRET=my-super-secret
 ```
 
-Make sure these values match your local database setup.
+> Ensure these values match your local database setup.
 
-* Run the database migrations:
+* Run database migrations:
 
 ```bash
 npm run migration:run
 ```
 
-### 3. Start the server
+### 3. Start the Server
 
 ```bash
 npm run start-server
